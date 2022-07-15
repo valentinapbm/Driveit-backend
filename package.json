@@ -6,6 +6,7 @@
   "type":"module",
   "scripts": {
     "start": "node ./src/server.ts",
+    "type":"module",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/server.ts"
