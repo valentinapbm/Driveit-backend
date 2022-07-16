@@ -87,12 +87,22 @@ export async function signIn(req: Request, res: Response, next: NextFunction): P
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
         const userId = req.user;
+        const image = req.body.file.secure_url;
         const user = await User.findByIdAndUpdate(userId, req.body, {
             new: true,
             runValidators: true,
             context: "query",
             })
             .select("-password")
+        const upImage = await User.findByIdAndUpdate(
+                userId,
+                { image: image },
+                {
+                    new: true,
+                    runValidators: true,
+                    context: "query",
+                }
+            );
         if(!user){
             throw new Error ("User does not exist")
         }

@@ -7,6 +7,8 @@ export interface IUser extends Document {
     email: string;
     password: String;
     image:string;
+    birthday:Date;
+    gender:String;
     cars:Array<any>;
     bookings:Array<any>;
     reviews:Array<any>;
@@ -43,6 +45,8 @@ const userSchema = new Schema(
         },
 
     image:String,
+    birthday:Date,
+    gender:String,
     cars: {
         type: [{ type: Schema.Types.ObjectId, ref: "Car" }],
         required: false,
