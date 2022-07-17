@@ -89,8 +89,10 @@ export async function update(req: Request, res: Response, next: NextFunction): P
         const userId = req.user;
         const image = req.body.file.secure_url;
         const {fullname, birthday, gender} = req.body
-
-        if(image === undefined || image === null){
+        if (image === undefined){
+            throw new Error("NO HAY IMAGEN")
+        }
+        if(image === undefined){
         const user = await User.findByIdAndUpdate(userId, req.body, {
             new: true,
             runValidators: true,
