@@ -95,7 +95,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
         })
             .select("-password")
         
-        res.status(200).json({ message: "User updated" });
+        res.status(200).json({ message: "User updated", data:user});
     }catch (err:any) {
         res.status(400).json({ message:err.message});
     }
