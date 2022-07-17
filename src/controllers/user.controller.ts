@@ -87,21 +87,20 @@ export async function signIn(req: Request, res: Response, next: NextFunction): P
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
         const userId = req.user;
-        const image = req.body.file.secure_url;
         const {fullname, birthday, gender} = req.body
-        if (image === undefined){
-            throw new Error("NO HAY IMAGEN")
-        }
-        if(image === undefined){
-        const user = await User.findByIdAndUpdate(userId, req.body, {
+
+        if(typeof(req.body.file.secure_url) === undefined){
+        const user = await User.findByIdAndUpdate(userId, {fullname:fullname, birthday:birthday, gender:gender }, {
             new: true,
             runValidators: true,
             context: "query",
             })
-            .select("-password")} else{
-        const upImage = await User.findByIdAndUpdate(
+            .select("-password")} 
+            
+            if (typeof(req.body.file.secure_url) !== undefined){
+            const upImage = await User.findByIdAndUpdate(
                 userId,
-                { image: image, fullname:fullname, birthday:birthday, gender:gender },
+                { image: req.body.file.secure_url, fullname:fullname, birthday:birthday, gender:gender },
                 {
                     new: true,
                     runValidators: true,
