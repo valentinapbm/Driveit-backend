@@ -88,24 +88,24 @@ export async function update(req: Request, res: Response, next: NextFunction): P
     try{
         const userId = req.user;
         const image = req.body.file.secure_url;
+        const {fullname, birthday, gender} = req.body
+
+        if(image === undefined || image === null){
         const user = await User.findByIdAndUpdate(userId, req.body, {
             new: true,
             runValidators: true,
             context: "query",
             })
-            .select("-password")
+            .select("-password")} else{
         const upImage = await User.findByIdAndUpdate(
                 userId,
-                { image: image },
+                { image: image, fullname:fullname, birthday:birthday, gender:gender },
                 {
                     new: true,
                     runValidators: true,
                     context: "query",
                 }
-            );
-        if(!user){
-            throw new Error ("User does not exist")
-        }
+            );}
         res.status(200).json({ message: "User updated" });
     } catch (err:any) {
         res.status(400).json({ message:err.message});
