@@ -87,27 +87,34 @@ export async function signIn(req: Request, res: Response, next: NextFunction): P
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
         const userId = req.user;
-        const {fullname, birthday, gender} = req.body
 
-        if(typeof(req.body.file.secure_url) === undefined){
-        const user = await User.findByIdAndUpdate(userId, {fullname:fullname, birthday:birthday, gender:gender }, {
+        const user = await User.findByIdAndUpdate(userId, req.body, {
             new: true,
             runValidators: true,
             context: "query",
-            })
-            .select("-password")} 
-            
-            if (typeof(req.body.file.secure_url) !== undefined){
-            const upImage = await User.findByIdAndUpdate(
-                userId,
-                { image: req.body.file.secure_url, fullname:fullname, birthday:birthday, gender:gender },
-                {
-                    new: true,
-                    runValidators: true,
-                    context: "query",
-                }
-            );}
+        })
+            .select("-password")
+        
         res.status(200).json({ message: "User updated" });
+    }catch (err:any) {
+        res.status(400).json({ message:err.message});
+    }
+}
+//UPDATE
+export async function updatePicture(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try{
+        const image = req.body.file.secure_url;
+
+        const upImage = await User.findByIdAndUpdate(
+            req.user,
+            { image: image },
+            {
+            new: true,
+            runValidators: true,
+            context: "query",
+            }
+        );
+        res.status(200).json({ message: "Image User updated",  data: upImage });
     } catch (err:any) {
         res.status(400).json({ message:err.message});
     }
