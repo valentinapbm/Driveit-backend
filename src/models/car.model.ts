@@ -17,6 +17,7 @@ export interface ICar extends Document {
     price:Number;
     lng: Number;
     lat: Number;
+    city:String;
 
 }
 
@@ -57,6 +58,9 @@ const carSchema = new Schema(
     lng: {
         type: Number,
         require:true
+    },
+    city: {
+        type: String,
     },
 
     images:Array,
