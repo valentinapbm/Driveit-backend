@@ -2,40 +2,63 @@ import { model, Schema, Document } from "mongoose";
 import {IUser} from "./user.model";
 
 export interface ICar extends Document {
-    cathegoryId:Number;
     brand: string;
     model:string;
-    features: Array<String>;
-    images:Array<String>;
-    year:Number;
+    fuel:string;
+    color:string;
+    countDoors:Number;
+    images:Array<any>;
+    year:String;
     user: IUser["_id"];
     bookings:Array<any>;
     reviews:Array<any>;
+    countSeats: Number;
+    transmision:String;
+    price:Number;
+    lng: Number;
+    lat: Number;
+
 }
 
 
 const carSchema = new Schema(
     {
-    cathegoryId: {
-        type: Number,
-        required: true,
-    },
     brand:{
         type: String,
         required: true,
     },
     model:{
         type: String,
-        required: true,
     },
     year:  {
         type: Number,
         required: true,
         },
-    features: {
-        type: Array,
-        required: true,
-        },
+    
+    fuel: {
+        type: String,
+    },
+    color: {
+        type: String,
+    },
+    transmision: {
+        type: String,
+    },
+    countDoors:Number,
+    countSeats: Number,
+    price: {
+        type: Number,
+        require:true
+    },
+    lat: {
+        type: Number,
+        require:true
+    },
+    lng: {
+        type: Number,
+        require:true
+    },
+
     images:Array,
 
     bookings: {

@@ -18,9 +18,9 @@ export async function list(req: Request, res: Response, next: NextFunction): Pro
 //show ID
 export async function show(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
-    const {cardId} = req.params;
+    const {carId} = req.params;
 
-        const car = await User.findById(cardId)
+        const car = await User.findById(carId)
         if (!car){
             throw new Error ("Car does not exist")
         }
@@ -32,6 +32,9 @@ export async function show(req: Request, res: Response, next: NextFunction): Pro
 
 //CREATE-POST
 export async function create(req: Request, res: Response, next: NextFunction): Promise<void> {
+    let listKeys: Array<any>;
+    
+    listKeys = Object.values(req.body);
     try{
         const id = req.user;
         const user = await User.findById(id);
@@ -41,6 +44,14 @@ export async function create(req: Request, res: Response, next: NextFunction): P
         }
 
         const car: ICar = await Car.create({...req.body, userId: user._id, });
+        
+        for (let i = 0; i < listKeys.length; i++) {
+            if (listKeys[i].secure_url !== undefined) {
+                await car.images.push(listKeys[i].secure_url);
+                await car.save({ validateBeforeSave: false });
+            }
+        }
+        
         await user.cars.push(car);
         await user.save({ validateBeforeSave: false });
     res.status(201).json({
