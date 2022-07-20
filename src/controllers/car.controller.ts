@@ -19,8 +19,10 @@ export async function list(req: Request, res: Response, next: NextFunction): Pro
 export async function show(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
     const {carId} = req.params;
+        console.log(carId)
+        const car = await   Car.findById(carId)
+        .populate("userId", "fullname image")
 
-        const car = await User.findById(carId)
         if (!car){
             throw new Error ("Car does not exist")
         }

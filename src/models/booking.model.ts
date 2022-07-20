@@ -1,14 +1,10 @@
 import { model, Schema, Document } from "mongoose";
 import {IUser} from "./user.model";
+import { ICar } from "./car.model";
 
 export interface IBooking extends Document {
-    cathegoryId:Number;
-    brand: string;
-    model:string;
-    features: Array<String>;
-    images:Array<String>;
-    year:Number;
     user: IUser["_id"];
+    carId:ICar["_id"];
 }
 
 
