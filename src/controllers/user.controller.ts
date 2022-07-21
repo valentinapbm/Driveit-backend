@@ -26,7 +26,10 @@ export async function show(req: Request, res: Response, next: NextFunction): Pro
     try{
     const id = req.user;
         console.log("este es el id", id);
-        const user = await User.findById(id).select("-password")
+        const user = await User.findById(id)
+        .select("-password")
+        .populate("cars")
+        
         if (!user){
             throw new Error ("User does not exist")
         }
@@ -46,11 +49,11 @@ export async function signUp(req: Request, res: Response, next: NextFunction): P
     const token = jwt.sign(
         { id: user._id }, //Payload ó datos usuario
         process.env.SECRET_KEY, //llave secreta
-        { expiresIn: 60 * 60 * 24 } 
+        { expiresIn: 60 * 60 * 100 } 
     );
     res.status(201).json({
         message: "user created",
-        data: { token, name: user.fullname, email: user.email },
+        data: { token, name: user.name, email: user.email },
         });
     }catch (err:any){
         res.status(400).json({ message: "user could not be created", data: err });
@@ -76,7 +79,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction): P
         const token = jwt.sign(
             { id: user._id }, //Payload ó datos usuario
             process.env.SECRET_KEY, //llave secreta
-            { expiresIn: 60 * 60 * 24 }
+            { expiresIn: 60 * 60 * 100 }
         );
         res.status(201).json({ message: "user login successfully", data: token });
     } catch (err:any) {
