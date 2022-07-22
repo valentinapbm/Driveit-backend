@@ -81,7 +81,33 @@ export async function update(req: Request, res: Response, next: NextFunction): P
 
         const car = await Car.findByIdAndUpdate(cardId, req.body, { new: true, runValidators: true });
         if (!car) {
-            throw new Error("Invalid user");
+            throw new Error("Invalid car");
+        }
+    res.status(201).json({
+        message: "car updated",
+        data: car,
+        });
+    }catch (err:any){
+        res.status(400).json({ message: "car could not be updated", data: err.message });
+    } 
+}
+//UPDATE IMAGES
+export async function updateImage(req: Request, res: Response, next: NextFunction): Promise<void> {
+    
+    let listKeys: Array<any>;
+    listKeys = Object.entries(req.body).filter(([key, value]) => key.includes("file"));
+    try{
+        const id = req.user;
+        const user = await User.findById(id);
+        const {cardId} = req.params;
+
+        if (!user) {
+        throw new Error("Invalid user");
+        }
+
+        const car = await Car.findById(cardId);
+        if (!car) {
+            throw new Error("Invalid car");
         }
 
         for (let j = 0; j < listKeys.length; j++) {
@@ -99,6 +125,8 @@ export async function update(req: Request, res: Response, next: NextFunction): P
         res.status(400).json({ message: "car could not be updated", data: err.message });
     } 
 }
+
+
 //DELETE
 export async function destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
