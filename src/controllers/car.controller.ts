@@ -67,6 +67,9 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 //UPDATE
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
+    
+    let listKeys: Array<any>;
+    listKeys = Object.entries(req.body).filter(([key, value]) => key.includes("file"));
     try{
         const id = req.user;
         const user = await User.findById(id);
@@ -77,7 +80,17 @@ export async function update(req: Request, res: Response, next: NextFunction): P
         }
 
         const car = await Car.findByIdAndUpdate(cardId, req.body, { new: true, runValidators: true });
+        if (!car) {
+            throw new Error("Invalid user");
+        }
 
+        for (let j = 0; j < listKeys.length; j++) {
+            console.log("AQUI", listKeys[j][1].secure_url);
+            if (listKeys[j][1].secure_url !== undefined || listKeys[j][1].secure_url !== null ) {
+            await car.images.push(listKeys[j][1].secure_url);
+            await car.save({ validateBeforeSave: false }); 
+            }
+        }
     res.status(201).json({
         message: "car updated",
         data: car,
