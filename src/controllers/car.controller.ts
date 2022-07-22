@@ -70,16 +70,19 @@ export async function update(req: Request, res: Response, next: NextFunction): P
     
     let listKeys: Array<any>;
     listKeys = Object.entries(req.body).filter(([key, value]) => key.includes("file"));
+
     try{
         const id = req.user;
         const user = await User.findById(id);
         const {carId} = req.params;
 
+        const images=JSON.parse(req.body.images)
+
         if (!user) {
         throw new Error("Invalid user");
         }
 
-        const car = await Car.findByIdAndUpdate(carId, JSON.parse(req.body), { new: true, runValidators: true });
+        const car = await Car.findByIdAndUpdate(carId,{...req.body, images:images}, { new: true, runValidators: true });
         if (!car) {
             throw new Error("Invalid user");
         }
