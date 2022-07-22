@@ -67,19 +67,17 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 //UPDATE
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
-    
-    let listKeys: Array<any>;
-    listKeys = Object.entries(req.body).filter(([key, value]) => key.includes("file"));
+
     try{
         const id = req.user;
         const user = await User.findById(id);
-        const {cardId} = req.params;
-
+        const {carId} = req.params;
+     
         if (!user) {
         throw new Error("Invalid user");
         }
 
-        const car = await Car.findByIdAndUpdate(cardId, req.body, { new: true, runValidators: true });
+        const car = await Car.findByIdAndUpdate(carId, req.body, { new: true, runValidators: true });
         if (!car) {
             throw new Error("Invalid car");
         }
