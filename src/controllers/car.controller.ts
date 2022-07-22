@@ -97,13 +97,13 @@ export async function updateImage(req: Request, res: Response, next: NextFunctio
     try{
         const id = req.user;
         const user = await User.findById(id);
-        const {cardId} = req.params;
+        const {carId} = req.params;
 
         if (!user) {
         throw new Error("Invalid user");
         }
 
-        const car = await Car.findById(cardId);
+        const car = await Car.findById(carId);
         if (!car) {
             throw new Error("Invalid car");
         }
@@ -133,8 +133,8 @@ export async function destroy(req: Request, res: Response, next: NextFunction): 
         if(!user){
             throw new Error ("User does not exist")
         }
-        const {cardId} = req.params;
-        const car = await Car.findByIdAndDelete(cardId);
+        const {carId} = req.params;
+        const car = await Car.findByIdAndDelete(carId);
 
         res.status(200).json({ message: "Car deleted", data:car });
     } catch (err:any) {
