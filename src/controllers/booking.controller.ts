@@ -11,7 +11,7 @@ export async function create(req: Request, res: Response, next: NextFunction): P
         const id = req.user;
         const user = await User.findById(id);
         const {carId} = req.body;
-        const car = await User.findById(carId);
+        const car = await Car.findById(carId);
         if (!user) {
         throw new Error("Invalid user");
         }
