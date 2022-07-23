@@ -6,17 +6,19 @@ import {connect} from "./db"
 import userRouter from "./routes/user"
 import carRouter from "./routes/car"
 import Stripe from "stripe";
+import { transporter, verify } from "./utils/mailer";
 import bookingRouter from "./routes/booking"
 dotenv.config();
 declare var process : {
     env: {
-        STRIPE_SECRET_KEY: string,
+        STRIPE_SECRET_KEY: string, 
         PORT:string
     }
     }
 const port = process.env.PORT;
 const app = express();
 connect();
+verify(transporter);
 
 app.use(cors());
 app.use(express.json());
@@ -30,7 +32,7 @@ const stripe = new Stripe("sk_test_51LORjaDDc38cnPECzpnd76z4oclZZ7uDuMWgxJQ4T07T
 
 
 app.listen(port, () => {
-    console.log(`Port: ${port} is running`);
+    console.log(`Port: ${port} is running`);  
 });
 
 app.post("/create-payment-intent", async (req, res) => {
