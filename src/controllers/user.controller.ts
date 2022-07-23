@@ -132,6 +132,37 @@ export async function updatePicture(req: Request, res: Response, next: NextFunct
         res.status(400).json({ message:err.message});
     }
 }
+
+
+//CHANGE PASSWORD
+export async function changePass(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try{
+        const userId = req.user;
+        const { password , newPassword } = req.body;
+        const user = await User.findById(userId)
+        
+        if (!user){
+            throw new Error ("User does not exist")
+        }
+        const isValid = await bcrypt.compare(password, user.password);
+        if(!isValid){
+            throw new Error ("old password invalid")
+        }
+        if (isValid) {
+            const encPassword = await bcrypt.hash(newPassword, 8);
+            const user = await User.findByIdAndUpdate(
+            userId,
+            { password: encPassword },
+            { new: true, runValidators: true, context: "query" }
+            );
+        }
+        res.status(200).json({ message: "Password updated" });
+    } catch (err:any) {
+        res.status(400).json({ message:err.message});
+    }
+}
+
+
 //DELETE
 export async function destroy(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
@@ -145,3 +176,5 @@ export async function destroy(req: Request, res: Response, next: NextFunction): 
         res.status(400).json({ message:err.message});
     }
 }
+
+

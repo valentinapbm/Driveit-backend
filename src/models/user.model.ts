@@ -6,10 +6,10 @@ export interface IUser extends Document {
     name: string;
     lastname: string;
     email: string;
-    password: String;
+    password: string;
     image:string;
     birthday:Date;
-    gender:String;
+    gender:string;
     cars:Array<any>;
     bookings:Array<any>;
     reviews:Array<any>;
