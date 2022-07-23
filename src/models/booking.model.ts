@@ -5,6 +5,12 @@ import { ICar } from "./car.model";
 export interface IBooking extends Document {
     user: IUser["_id"];
     carId:ICar["_id"];
+    startDate: Date;
+    endDate:Date;
+    pickupHour: Array<any>;
+    leftHour: Array<any>;
+    priceTotal: Number;
+    payment: String
 }
 
 
@@ -16,7 +22,7 @@ const bookingSchema = new Schema(
     },
     carId: {
         type: [{ type: Schema.Types.ObjectId, ref: "Car" }],
-        required: false,
+        required: true,
     },
     startDate: {
         type: Date,
@@ -27,14 +33,20 @@ const bookingSchema = new Schema(
         required: false,
     },
     pickupHour: {
-        type: Number,
+        type: Array,
         required: false,
     },
     leftHour: {
-        type: Number,
+        type: Array,
         required: false,
     },
     statusBooking:{
+        type:String
+    },
+    priceTotal:{
+        type:Number
+    },
+    payment:{
         type:String
     },
     },
