@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/server.ts",
   "scripts": {
-    "start": "node --loader ts-node/esm --experimental-specifier-resolution=node ./src/server.ts NODE_OPTIONS=--max-old-space-size=8192 webpack",
+    "start": "node --max-old-space-size=8192 --loader ts-node/esm --experimental-specifier-resolution=node ./src/server.ts",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/server.ts"
