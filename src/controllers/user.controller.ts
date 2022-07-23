@@ -28,7 +28,17 @@ export async function show(req: Request, res: Response, next: NextFunction): Pro
         console.log("este es el id", id);
         const user = await User.findById(id)
         .select("-password")
-        .populate("cars")
+        .populate({
+            path: "cars",
+            populate: { path: "bookings", populate: "userId" },
+        })
+        .populate({
+            path: "bookings",
+            populate: {
+            path: "userId",
+            select: "name",
+            },
+        })
         
         if (!user){
             throw new Error ("User does not exist")
