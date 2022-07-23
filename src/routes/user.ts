@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { signUp,list, signIn, show, update, destroy, updatePicture, changePass, recovery} from "../controllers/user.controller";
+import { signUp,list, signIn, show, update, destroy, updatePicture, changePass, recovery, reset} from "../controllers/user.controller";
 import { auth } from "../utils/auth";
 import { formData } from "../utils/formData";
 
@@ -13,5 +13,6 @@ router.route("/delete").delete(auth,destroy);
 router.route("/updateImage").put(auth, formData("USER"),updatePicture);
 router.route("/updatePassword").put(auth,changePass);
 router.route("/recoverypass").post(recovery);
+router.route("/resetpass").post(reset);
 
 export default router;

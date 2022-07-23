@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User, { IUser } from "../models/user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {transporter, recoverypassword} from "../utils/mailer"
+import {transporter, recoverypassword, resetpassword} from "../utils/mailer"
 
 declare var process : {
     env: {
@@ -181,6 +181,27 @@ export async function changePass(req: Request, res: Response, next: NextFunction
         }
         const token = generateOTP();
         await transporter.sendMail(recoverypassword(email, token, user.name));
+        res.status(200).json({ message: "email sent", data:token });
+    } catch (err:any) {
+        res.status(400).json({ message:err.message});
+    }
+}
+
+ //recovery pass 
+ export async function reset(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try{
+        const { email, newPassword } = req.body;
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            throw new Error("Email not found");
+        }
+        const encPassword = await bcrypt.hash(newPassword, 8);
+        await User.findByIdAndUpdate(
+            user._id,
+            { password: encPassword },
+            { new: true, useFindAndModify: false, runValidators: true }
+          );
+        await transporter.sendMail(resetpassword(email, user.name));
         res.status(200).json({ message: "email sent" });
     } catch (err:any) {
         res.status(400).json({ message:err.message});
