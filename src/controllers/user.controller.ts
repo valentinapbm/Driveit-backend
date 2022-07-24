@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import User, { IUser } from "../models/user.model";
+import Car, {ICar} from "../models/car.model";
+import Booking, {IBooking} from "../models/booking.model"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {transporter, recoverypassword, resetpassword} from "../utils/mailer"
@@ -216,6 +218,8 @@ export async function destroy(req: Request, res: Response, next: NextFunction): 
         if(!user){
             throw new Error ("User does not exist")
         }
+        const booking = await Booking.deleteMany({userId: {$eq:userId} });
+        const car = await Car.deleteMany({userId: {$eq:userId} });
         res.status(200).json({ message: "User deleted" });
     } catch (err:any) {
         res.status(400).json({ message:err.message});

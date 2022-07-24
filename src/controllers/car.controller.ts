@@ -1,12 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import User, { IUser } from "../models/user.model";
 import Car, {ICar} from "../models/car.model";
+import Booking, {IBooking} from "../models/booking.model"
 
 
 //GET- READ ALL
 export async function list(req: Request, res: Response, next: NextFunction): Promise<void> {
     try{
-        const cars = await Car.find();
+        const cars = await Car.find()
+        .populate({
+            path: "reviews",
+            populate: {
+                path: "userId",
+                select: "image name lastname",
+                },
+            });
         if(cars.length === 0){
             throw new Error ("There is not any car created")
         }
@@ -22,6 +30,14 @@ export async function show(req: Request, res: Response, next: NextFunction): Pro
         console.log(carId)
         const car = await   Car.findById(carId)
         .populate("userId", "name lastname image")
+        .populate("bookings")
+        .populate({
+            path: "reviews",
+            populate: {
+                path: "userId",
+                select: "image name",
+            },
+            })
 
         if (!car){
             throw new Error ("Car does not exist")
@@ -114,7 +130,11 @@ export async function destroy(req: Request, res: Response, next: NextFunction): 
         }
         const {carId} = req.params;
         const car = await Car.findByIdAndDelete(carId);
-
+        const booking = await Booking.deleteMany({carId: {$eq:carId} })
+        await user.cars.filter((item) => {
+            item._id.toString() !== carId;
+        });
+        await user.save({ validateBeforeSave: false });
         res.status(200).json({ message: "Car deleted", data:car });
     } catch (err:any) {
         res.status(400).json({ message:err.message});

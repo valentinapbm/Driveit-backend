@@ -8,6 +8,5 @@ router.route("/").get(list);
 router.route("/:carId").get(show); 
 router.route("/create").post(auth, formData("CAR"),create);
 router.route("/update/:carId").put(auth, formData("CAR"),update);
-
 router.route("/delete/:carId").delete(auth,destroy);
 export default router;

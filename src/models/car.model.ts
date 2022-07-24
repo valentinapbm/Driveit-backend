@@ -9,7 +9,7 @@ export interface ICar extends Document {
     countDoors:Number;
     images:Array<any>;
     year:String;
-    user: IUser["_id"];
+    userId: IUser["_id"];
     bookings:Array<any>;
     reviews:Array<any>;
     countSeats: Number;
