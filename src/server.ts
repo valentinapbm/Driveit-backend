@@ -28,7 +28,7 @@ app.use(morgan("dev"));
 app.use("/users", userRouter); 
 app.use("/cars", carRouter); 
 app.use("/bookings", bookingRouter); 
-app.use("/reviews", bookingRouter); 
+app.use("/reviews", reviewRouter); 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2020-08-27" });
 
 
