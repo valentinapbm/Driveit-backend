@@ -37,7 +37,6 @@ export async function show(req: Request, res: Response, next: NextFunction): Pro
             path: "bookings",
             populate: {
             path: "userId",
-            select: "name",
             },
         })
         
