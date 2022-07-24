@@ -29,7 +29,7 @@ app.use("/users", userRouter);
 app.use("/cars", carRouter); 
 app.use("/bookings", bookingRouter); 
 app.use("/reviews", bookingRouter); 
-const stripe = new Stripe("sk_test_51LORjaDDc38cnPECzpnd76z4oclZZ7uDuMWgxJQ4T07TtIrMpTC17g73QBlKCLdtzY8fEMivBCa7hx9BEmMmJ0S20058KxwRC1", { apiVersion: "2020-08-27" });
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2020-08-27" });
 
 
 app.listen(port, () => {
